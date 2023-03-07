@@ -33,9 +33,10 @@ export async function addEntry (req: Request, res: Response): Promise<Response> 
         if (IngresoIdUnique[0].length !== 0) {
           return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' })
         } else {
-          await conn.query('INSERT INTO Planes SET ?', [newEntry])
+          await conn.query('INSERT INTO PlanesIngresos SET ?', [newEntry])
           return res.json({
-            message: 'Entrada de Ingreso de plan añadida'
+            message: 'Entrada de Ingreso de plan añadida',
+            a: newEntry
           })
         }
       }
@@ -52,7 +53,7 @@ export async function getIdEntry (req: Request, res: Response): Promise<Response
   try {
     const { id } = req.params
     const conn = await connect()
-    const getId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]) as RowDataPacket[]
+    const getId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanesIngresoId = ?', [id]) as RowDataPacket[]
     if (getId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
     } else {
@@ -70,8 +71,8 @@ export async function deleteIdEntry (req: Request, res: Response): Promise<Respo
   try {
     const { id } = req.params
     const conn = await connect()
-    const deleteId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]) as RowDataPacket[]
-    await conn.query('DELETE FROM PlanesIngresos WHERE PlanIngresoId = ?', [id])
+    const deleteId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanesIngresoId = ?', [id]) as RowDataPacket[]
+    await conn.query('DELETE FROM PlanesIngresos WHERE PlanesIngresoId = ?', [id])
     if (deleteId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
     } else {
@@ -92,7 +93,7 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
     const { id } = req.params
     const updateEntry: PlanesIngresoEntry = req.body
     const conn = await connect()
-    const updateId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]) as RowDataPacket[]
+    const updateId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanesIngresoId = ?', [id]) as RowDataPacket[]
     const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [updateEntry.IngresoId]) as RowDataPacket[]
     const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]) as RowDataPacket[]
     if (IngresoIdExist[0].length === 0) {
@@ -101,7 +102,7 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
       if (IngresoIdUnique[0].length !== 0) {
         return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' })
       } else {
-        await conn.query('UPDATE PlanesIngresos set ? WHERE PlanIngresoId = ?', [updateEntry, id])
+        await conn.query('UPDATE PlanesIngresos set ? WHERE PlanesIngresoId = ?', [updateEntry, id])
         if (updateId[0].length === 0) {
           return res.status(404).json({ message: 'El registro con el id especificado no existe' })
         } else {

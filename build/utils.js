@@ -56,7 +56,7 @@ const parseFecha = (dateFromRequest) => {
     }
     return dateFromRequest;
 };
-const parseClaseId = (numberFromRequest) => {
+const parsePlanId = (numberFromRequest) => {
     if (!isInt(numberFromRequest)) {
         throw new Error('ClaseId inexistente o incorrecta');
     }
@@ -99,7 +99,7 @@ const addIngresoEntry = (object) => {
 exports.addIngresoEntry = addIngresoEntry;
 const addPlanesIngresoEntry = (object) => {
     const newEntry = {
-        PlanId: parseClaseId(object.ClaseId),
+        PlanId: parsePlanId(object.PlanId),
         IngresoId: parseIngresoId(object.IngresoId),
         FechaInicio: parseFecha(object.FechaInicio)
     };

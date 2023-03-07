@@ -27,7 +27,7 @@ class App {
         this.app.use(index_1.default);
         this.app.use('/api/ingresos', ingresos_1.default);
         this.app.use('/api/planes', planes_1.default);
-        this.app.use('/api/planingresos', planesingresos_1.default);
+        this.app.use('/api/planesingresos', planesingresos_1.default);
     }
     async listen() {
         await this.app.listen(this.port);
