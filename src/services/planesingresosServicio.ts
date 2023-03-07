@@ -35,8 +35,7 @@ export async function addEntry (req: Request, res: Response): Promise<Response> 
         } else {
           await conn.query('INSERT INTO PlanesIngresos SET ?', [newEntry])
           return res.json({
-            message: 'Entrada de Ingreso de plan añadida',
-            a: newEntry
+            message: 'Entrada de Ingreso de plan añadida'
           })
         }
       }
