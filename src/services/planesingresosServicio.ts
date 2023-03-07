@@ -21,7 +21,7 @@ export async function addEntry (req: Request, res: Response): Promise<Response> 
   try {
     const newEntry: PlanesIngresoEntryWithoutId = addPlanesIngresoEntry(req.body)
     const conn = await connect()
-    const IngresoIdUnique = await conn.query('SELECT * FROM Planes WHERE IngresoId = ?', [newEntry.IngresoId]) as RowDataPacket[]
+    const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [newEntry.IngresoId]) as RowDataPacket[]
     const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [newEntry.IngresoId]) as RowDataPacket[]
     const [IngresoIsPlan] = await conn.query('SELECT TipoIngreso FROM Ingresos WHERE IngresoId = ?', [newEntry.IngresoId]) as RowDataPacket[]
     if (IngresoIsPlan[0].TipoIngreso !== 'planes') {
