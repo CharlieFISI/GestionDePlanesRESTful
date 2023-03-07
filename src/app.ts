@@ -27,7 +27,7 @@ export class App {
     this.app.use(indexRouter)
     this.app.use('/api/ingresos', ingresoRouter)
     this.app.use('/api/planes', planRouter)
-    this.app.use('/api/planingresos', planingresoRouter)
+    this.app.use('/api/planesingresos', planingresoRouter)
   }
 
   async listen (): Promise<void> {
