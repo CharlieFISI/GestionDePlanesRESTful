@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { App } from './app'
 
 const router = Router()
-const port = 3000
+const port = 3031
 
 router.get('/', (_req, res) => res.json('Bienvenido a mi API'))
 
