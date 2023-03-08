@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPlanesIngresoEntry = exports.addIngresoEntry = exports.addPlanEntry = void 0;
+exports.addIngresoInfoEntry = exports.addPlanesIngresoEntry = exports.addIngresoEntry = exports.addPlanEntry = void 0;
 const enums_1 = require("./enums");
 const parseNombre = (stringFromRequest) => {
     if (!isString(stringFromRequest)) {
@@ -106,3 +106,16 @@ const addPlanesIngresoEntry = (object) => {
     return newEntry;
 };
 exports.addPlanesIngresoEntry = addPlanesIngresoEntry;
+const addIngresoInfoEntry = (object) => {
+    const newEntry = {
+        TipoIngreso: parseTipoIngreso('planes'),
+        UsuarioId: parseUsuarioId(object.UsuarioId),
+        ClienteId: parseClienteId(object.ClienteId),
+        MontoTotal: parseMontoTotal(object.MontoTotal),
+        Fecha: parseFecha(object.Fecha),
+        PlanId: parsePlanId(object.PlanId),
+        FechaInicio: parseFecha(object.FechaInicio)
+    };
+    return newEntry;
+};
+exports.addIngresoInfoEntry = addIngresoInfoEntry;

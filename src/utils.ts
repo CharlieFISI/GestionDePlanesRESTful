@@ -1,5 +1,5 @@
 import { TipoIngreso } from './enums'
-import { PlanEntryWithoutId, IngresoEntryWithoutId, PlanesIngresoEntryWithoutId } from './types'
+import { PlanEntryWithoutId, IngresoEntryWithoutId, PlanesIngresoEntryWithoutId, IngresoInfoEntryWithoutId } from './types'
 
 const parseNombre = (stringFromRequest: any): string => {
   if (!isString(stringFromRequest)) {
@@ -115,6 +115,18 @@ export const addPlanesIngresoEntry = (object: any): PlanesIngresoEntryWithoutId 
   const newEntry: PlanesIngresoEntryWithoutId = {
     PlanId: parsePlanId(object.PlanId),
     IngresoId: parseIngresoId(object.IngresoId),
+    FechaInicio: parseFecha(object.FechaInicio)
+  }
+  return newEntry
+}
+
+export const addIngresoInfoEntry = (object: any): IngresoInfoEntryWithoutId => {
+  const newEntry: IngresoInfoEntryWithoutId = {
+    TipoIngreso: parseTipoIngreso('planes'),
+    UsuarioId: parseUsuarioId(object.UsuarioId),
+    ClienteId: parseClienteId(object.ClienteId),
+    MontoTotal: parseMontoTotal(object.MontoTotal),
+    PlanId: parsePlanId(object.PlanId),
     FechaInicio: parseFecha(object.FechaInicio)
   }
   return newEntry

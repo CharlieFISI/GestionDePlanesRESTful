@@ -29,23 +29,16 @@ async function addEntry(req, res) {
         if (IngresoIsPlan[0].TipoIngreso !== 'planes') {
             return res.status(404).json({ message: 'El registro con el IngresoId especificado no es un ingreso para Planes' });
         }
-        else {
-            if (IngresoIdExist[0].length === 0) {
-                return res.status(404).json({ message: 'El registro con el id especificado no existe' });
-            }
-            else {
-                if (IngresoIdUnique[0].length !== 0) {
-                    return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' });
-                }
-                else {
-                    await conn.query('INSERT INTO PlanesIngresos SET ?', [newEntry]);
-                    return res.json({
-                        message: 'Entrada de Ingreso de plan añadida',
-                        a: newEntry
-                    });
-                }
-            }
+        if (IngresoIdExist[0].length === 0) {
+            return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
+        if (IngresoIdUnique[0].length !== 0) {
+            return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' });
+        }
+        await conn.query('INSERT INTO PlanesIngresos SET ?', [newEntry]);
+        return res.json({
+            message: 'Entrada de Ingreso de plan añadida'
+        });
     }
     catch (e) {
         let message;
@@ -110,27 +103,27 @@ async function updateIdEntry(req, res) {
         const updateEntry = req.body;
         const conn = await (0, conexion_1.connect)();
         const updateId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanesIngresoId = ?', [id]);
-        const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
-        const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
-        if (IngresoIdExist[0].length === 0) {
+        if (updateId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
-        else {
-            if (IngresoIdUnique[0].length !== 0) {
-                return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' });
+        if (!isNaN(updateEntry.IngresoId)) {
+            const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
+            if (IngresoIdExist[0].length === 0) {
+                return res.status(404).json({
+                    message: 'El registro con el UsuarioId especificado no existe'
+                });
             }
-            else {
-                await conn.query('UPDATE PlanesIngresos set ? WHERE PlanesIngresoId = ?', [updateEntry, id]);
-                if (updateId[0].length === 0) {
-                    return res.status(404).json({ message: 'El registro con el id especificado no existe' });
-                }
-                else {
-                    return res.json({
-                        message: 'Entrada de Ingreso de plan actualizada'
-                    });
-                }
+            const [IngresoIdUnique] = await conn.query('SELECT PlanesIngresoId FROM PlanesIngresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
+            if (IngresoIdUnique.length !== 0 && IngresoIdUnique.PlanesIngresoId !== updateEntry.PlanesIngresoId) {
+                return res.status(404).json({
+                    message: 'Existe un registro con el mismo IngresoId'
+                });
             }
         }
+        await conn.query('UPDATE PlanesIngresos set ? WHERE PlanesIngresoId = ?', [updateEntry, id]);
+        return res.json({
+            message: 'Entrada de Clase actualizada'
+        });
     }
     catch (e) {
         let message;

@@ -23,6 +23,18 @@ export interface PlanesIngresoEntry {
   FechaInicio: Date
 }
 
+export interface IngresoInfoEntry {
+  IngresoId: number
+  TipoIngreso: TipoIngreso
+  UsuarioId: number
+  ClienteId: number
+  MontoTotal: number
+  PlanesIngresoId: number
+  PlanId: number
+  FechaInicio: Date
+}
+
 export type PlanEntryWithoutId = Omit<PlanEntry, 'PlanId'>
 export type IngresoEntryWithoutId = Omit<IngresoEntry, 'IngresoId'>
 export type PlanesIngresoEntryWithoutId = Omit<PlanesIngresoEntry, 'PlanesIngresoId'>
+export type IngresoInfoEntryWithoutId = Omit<IngresoInfoEntry, 'PlanesIngresoId', 'IngresoId'>
