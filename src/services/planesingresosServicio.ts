@@ -93,24 +93,27 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
     const updateEntry: PlanesIngresoEntry = req.body
     const conn = await connect()
     const updateId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanesIngresoId = ?', [id]) as RowDataPacket[]
-    const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [updateEntry.IngresoId]) as RowDataPacket[]
-    const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]) as RowDataPacket[]
-    if (IngresoIdExist[0].length === 0) {
+    if (updateId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
-    } else {
-      if (IngresoIdUnique[0].length !== 0) {
-        return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' })
-      } else {
-        await conn.query('UPDATE PlanesIngresos set ? WHERE PlanesIngresoId = ?', [updateEntry, id])
-        if (updateId[0].length === 0) {
-          return res.status(404).json({ message: 'El registro con el id especificado no existe' })
-        } else {
-          return res.json({
-            message: 'Entrada de Ingreso de plan actualizada'
-          })
-        }
+    }
+    if (!isNaN(updateEntry.IngresoId)) {
+      const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]) as RowDataPacket[]
+      if (IngresoIdExist[0].length === 0) {
+        return res.status(404).json({
+          message: 'El registro con el UsuarioId especificado no existe'
+        })
+      }
+      const [IngresoIdUnique] = await conn.query('SELECT PlanesIngresoId FROM PlanesIngresos WHERE IngresoId = ?', [updateEntry.IngresoId]) as RowDataPacket[]
+      if (IngresoIdUnique.length !== 0 && IngresoIdUnique.PlanesIngresoId !== updateEntry.PlanesIngresoId) {
+        return res.status(404).json({
+          message: 'Existe un registro con el mismo IngresoId'
+        })
       }
     }
+    await conn.query('UPDATE PlanesIngresos set ? WHERE PlanesIngresoId = ?', [updateEntry, id])
+    return res.json({
+      message: 'Entrada de Clase actualizada'
+    })
   } catch (e) {
     let message
     if (e instanceof Error) message = e.message

@@ -83,21 +83,30 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
     const { id } = req.params
     const updateEntry: IngresoEntry = req.body
     const conn = await connect()
-    const UsuarioIdExist = await conn.query('SELECT * FROM Usuarios WHERE UsuarioId = ?', [updateEntry.UsuarioId]) as RowDataPacket[]
-    const ClienteIdExist = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [updateEntry.ClienteId]) as RowDataPacket[]
-    if (UsuarioIdExist[0].length === 0 && ClienteIdExist[0].length === 0) {
-      return res.status(404).json({ message: 'El registro con el id especificado no existe' })
-    } else {
-      const updateId = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [id]) as RowDataPacket[]
-      await conn.query('UPDATE Ingresos set ? WHERE IngresoId = ?', [updateEntry, id])
-      if (updateId[0].length === 0) {
-        return res.status(404).json({ message: 'El registro con el id especificado no existe' })
-      } else {
-        return res.json({
-          message: 'Entrada de Clase actualizada'
+    const updateId = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [id]) as RowDataPacket[]
+    if (updateId[0].length === 0) {
+      return res.status(404).json({ message: 'El registro con el id especificado en la ruta no existe' })
+    }
+    if (!isNaN(updateEntry.UsuarioId) && isNaN(updateEntry.ClienteId)) {
+      const UsuarioIdExist = await conn.query('SELECT * FROM Usuarios WHERE UsuarioId = ?', [updateEntry.UsuarioId]) as RowDataPacket[]
+      if (UsuarioIdExist[0].length === 0) {
+        return res.status(404).json({
+          message: 'El registro con el UsuarioId especificado no existe'
         })
       }
     }
+    if (isNaN(updateEntry.UsuarioId) && !isNaN(updateEntry.ClienteId)) {
+      const ClienteIdExist = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [updateEntry.ClienteId]) as RowDataPacket[]
+      if (ClienteIdExist[0].length === 0) {
+        return res.status(404).json({
+          message: 'El registro con el ClienteId especificado no existe'
+        })
+      }
+    }
+    await conn.query('UPDATE Ingresos set ? WHERE IngresoId = ?', [updateEntry, id])
+    return res.json({
+      message: 'Entrada de Ingreso actualizada'
+    })
   } catch (e) {
     let message
     if (e instanceof Error) message = e.message
