@@ -112,7 +112,6 @@ const addIngresoInfoEntry = (object) => {
         UsuarioId: parseUsuarioId(object.UsuarioId),
         ClienteId: parseClienteId(object.ClienteId),
         MontoTotal: parseMontoTotal(object.MontoTotal),
-        Fecha: parseFecha(object.Fecha),
         PlanId: parsePlanId(object.PlanId),
         FechaInicio: parseFecha(object.FechaInicio)
     };

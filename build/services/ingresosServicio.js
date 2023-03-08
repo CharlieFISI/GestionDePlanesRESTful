@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.addInfoIngresoEntry = exports.getInfoIngreso = exports.updateIdEntry = exports.deleteIdEntry = exports.getIdEntry = exports.addEntry = exports.getAllEntries = void 0;
 const conexion_1 = require("../conexion");
 const utils_1 = require("../utils");
+const enums_1 = require("../enums");
 async function getAllEntries(_req, res) {
     try {
         const conn = await (0, conexion_1.connect)();
@@ -151,21 +152,28 @@ exports.getInfoIngreso = getInfoIngreso;
 async function addInfoIngresoEntry(req, res) {
     try {
         const newEntry = (0, utils_1.addIngresoInfoEntry)(req.body);
-        const ingresoEntry = (0, utils_1.addIngresoEntry)(req.body);
-        const planIngresoEntry = (0, utils_1.addPlanesIngresoEntry)(req.body);
+        const ingresoEntry = {
+            TipoIngreso: enums_1.TipoIngreso.Planes,
+            UsuarioId: newEntry.UsuarioId,
+            ClienteId: newEntry.ClienteId,
+            MontoTotal: newEntry.MontoTotal,
+            Fecha: new Date(new Date().toLocaleDateString('en-EN', { timeZone: 'America/Lima' }))
+        };
         const conn = await (0, conexion_1.connect)();
-        const UsuarioIdExist = await conn.query('SELECT * FROM Usuarios WHERE UsuarioId = ?', [newEntry.UsuarioId]);
-        const ClienteIdExist = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [newEntry.ClienteId]);
+        const UsuarioIdExist = await conn.query('SELECT * FROM Usuarios WHERE UsuarioId = ?', [ingresoEntry.UsuarioId]);
+        const ClienteIdExist = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [ingresoEntry.ClienteId]);
         if (UsuarioIdExist[0].length === 0 && ClienteIdExist[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
-        const fechaActual = new Date().toLocaleDateString('es-PE', { timeZone: 'America/Lima' });
-        ingresoEntry.Fecha = new Date(fechaActual);
         const insertIngreso = await conn.query('INSERT INTO Ingresos SET ?', [ingresoEntry]);
-        newEntry.IngresoId = insertIngreso[0].insertId;
-        const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [newEntry.IngresoId]);
-        const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [newEntry.IngresoId]);
-        const [IngresoIsPlan] = await conn.query('SELECT TipoIngreso FROM Ingresos WHERE IngresoId = ?', [newEntry.IngresoId]);
+        const planIngresoEntry = {
+            PlanId: newEntry.PlanId,
+            IngresoId: insertIngreso[0].insertId,
+            FechaInicio: newEntry.FechaInicio
+        };
+        const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [planIngresoEntry.IngresoId]);
+        const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [planIngresoEntry.IngresoId]);
+        const [IngresoIsPlan] = await conn.query('SELECT TipoIngreso FROM Ingresos WHERE IngresoId = ?', [planIngresoEntry.IngresoId]);
         if (IngresoIsPlan[0].TipoIngreso !== 'planes') {
             return res.status(404).json({ message: 'El registro con el IngresoId especificado no es un ingreso para Planes' });
         }
