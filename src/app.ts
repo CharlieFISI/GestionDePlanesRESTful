@@ -22,7 +22,7 @@ export class App {
   middlewares (): void {
     this.app.use(express.json())
     this.app.use(cors({
-      origin: 'https://titaniumgym.azurewebsites.net/'
+      origin: 'https://titaniumgym.azurewebsites.net'
     }))
   }
 
