@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express'
-import { getAllEntries, addEntry, getIdEntry, deleteIdEntry, updateIdEntry, addInfoIngresoEntry } from '../services/ingresosServicio'
+import { getAllEntries, addEntry, getIdEntry, deleteIdEntry, updateIdEntry, addInfoIngresoEntry, getInfoIngreso } from '../services/ingresosServicio'
 
 const router = express.Router()
 
@@ -8,7 +8,8 @@ router.route('/')
   .get(getAllEntries)
   .post(addEntry)
 
-router.route('/agregar')
+router.route('/plan')
+  .get(getInfoIngreso)
   .post(addInfoIngresoEntry)
 
 router.route('/:id')
