@@ -10,7 +10,7 @@ const router = express_1.default.Router();
 router.route('/')
     .get(ingresosServicio_1.getAllEntries)
     .post(ingresosServicio_1.addEntry);
-router.route('/plan')
+router.route('/agregar')
     .post(ingresosServicio_1.addInfoIngresoEntry);
 router.route('/:id')
     .get(ingresosServicio_1.getIdEntry)
