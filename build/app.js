@@ -5,15 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
 const index_1 = __importDefault(require("./index"));
 const ingresos_1 = __importDefault(require("./routes/ingresos"));
 const planes_1 = __importDefault(require("./routes/planes"));
 const planesingresos_1 = __importDefault(require("./routes/planesingresos"));
-const allowedOrigins = ['http://localhost:3000'];
-const options = {
-    origin: allowedOrigins
-};
 class App {
     constructor(port) {
         this.port = port;
@@ -27,7 +22,6 @@ class App {
     }
     middlewares() {
         this.app.use(express_1.default.json());
-        this.app.use((0, cors_1.default)(options));
     }
     routes() {
         this.app.use(index_1.default);
