@@ -31,9 +31,9 @@ class App {
     }
     routes() {
         this.app.use(index_1.default);
-        this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingresos/v1/ingresos', ingresos_1.default);
-        this.app.use('/rs-ne-gestion-de-planes/servicio-de-planes/v1/planes', planes_1.default);
-        this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingreso-de-planes/v1/planesingresos', planesingresos_1.default);
+        this.app.use('/servicio-de-ingresos/v1/ingresos', ingresos_1.default);
+        this.app.use('/servicio-de-planes/v1/planes', planes_1.default);
+        this.app.use('/servicio-de-ingreso-de-planes/v1/planesingresos', planesingresos_1.default);
     }
     async listen() {
         await this.app.listen(this.port);

@@ -31,9 +31,9 @@ export class App {
 
   routes (): void {
     this.app.use(indexRouter)
-    this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingresos/v1/ingresos', ingresoRouter)
-    this.app.use('/rs-ne-gestion-de-planes/servicio-de-planes/v1/planes', planRouter)
-    this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingreso-de-planes/v1/planesingresos', planingresoRouter)
+    this.app.use('/servicio-de-ingresos/v1/ingresos', ingresoRouter)
+    this.app.use('/servicio-de-planes/v1/planes', planRouter)
+    this.app.use('/servicio-de-ingreso-de-planes/v1/planesingresos', planingresoRouter)
   }
 
   async listen (): Promise<void> {
