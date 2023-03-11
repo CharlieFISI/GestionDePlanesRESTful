@@ -12,8 +12,8 @@ async function connect() {
         host: 'mysql-titaniumgym-prod-001.mysql.database.azure.com',
         user: 'TitaniumBD',
         password: 'AdminMySQL1',
-        database: 'titaniummysql',
-        port: 6435,
+        database: 'gimnasio',
+        port: 3306,
         ssl: {
             rejectUnauthorized: true,
             ca: serverCA
