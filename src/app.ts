@@ -5,6 +5,11 @@ import ingresoRouter from './routes/ingresos'
 import planRouter from './routes/planes'
 import planingresoRouter from './routes/planesingresos'
 
+const allowedOrigins = ['192.168.0.123', 'https://titaniumgym.azurewebsites.net']
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+}
+
 export class App {
   private readonly app: Application
 
@@ -21,16 +26,14 @@ export class App {
 
   middlewares (): void {
     this.app.use(express.json())
-    this.app.use(cors({
-      origin: 'https://titaniumgym.azurewebsites.net'
-    }))
+    this.app.use(cors(options))
   }
 
   routes (): void {
     this.app.use(indexRouter)
-    this.app.use('/servicio-de-ingresos/v1/ingresos', ingresoRouter)
-    this.app.use('/servicio-de-planes/v1/planes', planRouter)
-    this.app.use('/servicio-de-ingreso-de-planes/v1/planesingresos', planingresoRouter)
+    this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingresos/v1/ingresos', ingresoRouter)
+    this.app.use('/rs-ne-gestion-de-planes/servicio-de-planes/v1/planes', planRouter)
+    this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingreso-de-planes/v1/planesingresos', planingresoRouter)
   }
 
   async listen (): Promise<void> {

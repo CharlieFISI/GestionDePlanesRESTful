@@ -10,6 +10,10 @@ const index_1 = __importDefault(require("./index"));
 const ingresos_1 = __importDefault(require("./routes/ingresos"));
 const planes_1 = __importDefault(require("./routes/planes"));
 const planesingresos_1 = __importDefault(require("./routes/planesingresos"));
+const allowedOrigins = ['192.168.0.123', 'https://titaniumgym.azurewebsites.net'];
+const options = {
+    origin: allowedOrigins
+};
 class App {
     constructor(port) {
         this.port = port;
@@ -23,15 +27,13 @@ class App {
     }
     middlewares() {
         this.app.use(express_1.default.json());
-        this.app.use((0, cors_1.default)({
-            origin: 'https://titaniumgym.azurewebsites.net/'
-        }));
+        this.app.use((0, cors_1.default)(options));
     }
     routes() {
         this.app.use(index_1.default);
-        this.app.use('/servicio-de-ingresos/v1/ingresos', ingresos_1.default);
-        this.app.use('/servicio-de-planes/v1/planes', planes_1.default);
-        this.app.use('/servicio-de-ingreso-de-planes/v1/planesingresos', planesingresos_1.default);
+        this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingresos/v1/ingresos', ingresos_1.default);
+        this.app.use('/rs-ne-gestion-de-planes/servicio-de-planes/v1/planes', planes_1.default);
+        this.app.use('/rs-ne-gestion-de-planes/servicio-de-ingreso-de-planes/v1/planesingresos', planesingresos_1.default);
     }
     async listen() {
         await this.app.listen(this.port);
