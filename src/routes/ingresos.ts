@@ -8,7 +8,7 @@ router.route('/')
   .get(getAllEntries)
   .post(addEntry)
 
-router.route('/plan')
+router.route('/agregar')
   .post(addInfoIngresoEntry)
 
 router.route('/:id')
