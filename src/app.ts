@@ -5,7 +5,7 @@ import ingresoRouter from './routes/ingresos'
 import planRouter from './routes/planes'
 import planingresoRouter from './routes/planesingresos'
 
-const allowedOrigins = ['192.168.0.123', 'https://titaniumgym.azurewebsites.net']
+const allowedOrigins = ['192.168.0.123:3000', 'https://titaniumgym.azurewebsites.net']
 const options: cors.CorsOptions = {
   origin: allowedOrigins
 }

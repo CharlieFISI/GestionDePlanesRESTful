@@ -10,7 +10,7 @@ const index_1 = __importDefault(require("./index"));
 const ingresos_1 = __importDefault(require("./routes/ingresos"));
 const planes_1 = __importDefault(require("./routes/planes"));
 const planesingresos_1 = __importDefault(require("./routes/planesingresos"));
-const allowedOrigins = ['192.168.0.123', 'https://titaniumgym.azurewebsites.net'];
+const allowedOrigins = ['192.168.0.123:3000', 'https://titaniumgym.azurewebsites.net'];
 const options = {
     origin: allowedOrigins
 };
